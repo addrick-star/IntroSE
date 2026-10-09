@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ResQTh — Emergency Support</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#app">Skip to main content</a>
+
+  <header class="topbar">
+    <button class="brand" id="homeBtn" aria-label="ResQTh home">
+      <span aria-hidden="true">R</span><b>ResQTh</b>
+    </button>
+    <div class="top-actions">
+      <button class="utility-btn" id="helpBtn" aria-expanded="false" aria-controls="helpPanel">Help</button>
+      <button class="utility-btn" id="langBtn" aria-label="Switch language">ไทย</button>
+    </div>
+  </header>
+
+  <section class="help-panel" id="helpPanel" hidden>
+    <div class="help-inner">
+      <div>
+        <strong>How ResQTh works</strong>
+        <p>Set your province → choose or describe the situation → review the result → follow the response.</p>
+      </div>
+      <button class="utility-btn" id="closeHelpBtn">Close</button>
+    </div>
+  </section>
+
+  <main id="app" tabindex="-1"></main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
