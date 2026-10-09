@@ -74,3 +74,58 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .help-inner p{margin:2px 0 0;color:var(--muted)}
 
 main{width:min(1120px,calc(100% - 32px));margin:auto;padding:32px 0 64px}
+
+.eyebrow{
+  font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+  font-weight:800;color:var(--blue)
+}
+h1,h2,h3{color:var(--ink);line-height:1.15}
+h1{font-size:clamp(34px,5vw,54px);letter-spacing:-.03em;margin:8px 0 12px}
+h2{font-size:26px;margin:0}
+h3{font-size:18px;margin-top:0}
+.helper{font-size:13px;color:var(--muted);margin-top:5px}
+.muted{color:var(--muted)}
+
+.hero{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:32px;box-shadow:var(--shadow)
+}
+.hero p{max-width:760px;margin:0;color:var(--muted)}
+.location{
+  margin-top:24px;padding:16px;border-radius:14px;background:var(--surface-soft);
+  display:flex;gap:16px;align-items:center;justify-content:space-between
+}
+.locmeta{display:flex;gap:12px;align-items:center}
+.locicon{
+  width:44px;height:44px;border-radius:12px;background:var(--blue-soft);
+  color:var(--blue);display:grid;place-items:center;font-weight:900
+}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+
+.btn{padding:0 16px}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.urgent{background:var(--red);border-color:var(--red);color:#fff}
+.btn.success{background:var(--green);border-color:var(--green);color:#fff}
+.btn.secondary{background:#fff}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+
+.section{margin-top:32px}
+.sectionhead{
+  display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:14px
+}
+.sectionhead p{margin:4px 0 0;color:var(--muted)}
+
+/* Keep all requested categories visible. 3 x 3 on desktop. */
+.category-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px
+}
+.category-card{
+  min-height:174px;text-align:left;background:#fff;border:1px solid var(--border);
+  border-radius:18px;padding:20px;box-shadow:var(--shadow);color:var(--text);
+  transition:.16s ease
+}
+.category-card .icon{
+  width:48px;height:48px;border-radius:14px;background:var(--blue-soft);
+  color:var(--blue);display:grid;place-items:center;font-weight:900;
+  font-size:19px;margin-bottom:20px
+}
