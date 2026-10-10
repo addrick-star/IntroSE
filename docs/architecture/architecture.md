@@ -1,6 +1,6 @@
- ResQTh System Architecture
+# ResQTh System Architecture
 
-1. Architecture Overview
+## 1. Architecture Overview
 
 ResQTh uses a combination of layered, client-server, MVC, and monolithic architectural styles. These styles are used together because each addresses a different aspect of the system.
 
@@ -11,7 +11,7 @@ ResQTh uses a combination of layered, client-server, MVC, and monolithic archite
 
 These architectural styles complement each other rather than conflict with one another.
 
-Layered Architecture
+### Layered Architecture
 
 The server side of ResQTh is organized into three main layers:
 
@@ -27,7 +27,7 @@ Presentation → Application Logic → Data
 
 This separation keeps each layer focused on its own responsibility and reduces unnecessary coupling between request handling, system rules, and data management.
 
-MVC Architecture
+### MVC Architecture
 
 The client side of ResQTh follows the Model-View-Controller (MVC) pattern to separate the user interface from interaction handling and client-side state.
 
@@ -39,7 +39,7 @@ The client side of ResQTh follows the Model-View-Controller (MVC) pattern to sep
 
 MVC helps keep the user interface organized by separating what the user sees, how user actions are handled, and what information the client currently holds.
 
-Client-Server Architecture
+### Client-Server Architecture
 
 ResQTh follows a client-server structure.
 
@@ -51,7 +51,7 @@ The client and server may communicate through request/response interfaces. The s
 
 This structure separates user interaction from server-side processing and data responsibilities.
 
-Monolithic Structure
+### Monolithic Structure
 
 The ResQTh server application is designed as a monolith rather than a collection of microservices.
 
