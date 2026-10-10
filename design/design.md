@@ -1,6 +1,7 @@
 # Design Document: ResQTh
 
-This document contains the **UML diagrams, data model, and UI design / user-flow mapping** for ResQTh.  
+This document contains the **UML diagrams, logical data model, and UI design / user-flow mapping** for the ResQTh MVP.
+
 The system architecture is documented separately in the `architecture/` folder.
 
 ---
@@ -9,7 +10,7 @@ The system architecture is documented separately in the `architecture/` folder.
 
 ### 1.1 Use Case Diagram
 
-The use case diagram shows the scope of the ResQTh MVP and focuses only on the four Must-Have Functional Requirements defined in the SRS.
+The use case diagram shows the scope of the ResQTh MVP and focuses on the four Must-Have Functional Requirements defined in the SRS.
 
 ![ResQTh Use Case Diagram](diagrams/use-case-diagram.png)
 
@@ -21,72 +22,71 @@ The use case diagram shows the scope of the ResQTh MVP and focuses only on the f
 
 ### Use Cases and SRS Alignment
 
-| Use Case | Related FR | Why it aligns with the SRS |
+| Use Case | Related FR | Alignment with the SRS |
 | :--- | :--- | :--- |
-| `UC-01 Detect User's Location` | FR-1 | FR-1 requires ResQTh to detect the user's province automatically, or allow manual province selection when location detection fails. |
+| `UC-01 Detect User's Location` | FR-1 | FR-1 requires ResQTh to detect the user's province automatically or allow manual province selection when location detection is unavailable. |
 | `UC-02 Select Emergency Category` | FR-2 | FR-2 requires the user to select a predefined emergency category so the system can filter the appropriate emergency information and determine urgency. |
-| `UC-03 Display Information` | FR-3 | FR-3 requires ResQTh to display the correct response based on urgency, including hotline actions, GPS sharing, checklists, notes, facilities, and national fallback when needed. |
-| `UC-04 Add via Natural Language` | FR-4 | FR-4 requires the system to interpret a natural-language description, identify the province/category/urgency, and allow the user to correct the result before continuing. |
+| `UC-03 Display Information` | FR-3 | FR-3 requires ResQTh to display different emergency information and actions depending on urgency, with a national fallback when no local match is available. |
+| `UC-04 Add via Natural Language` | FR-4 | FR-4 requires the system to interpret a natural-language description and allow the user to correct the result before continuing. |
 
-The use case diagram intentionally does **not** include account registration, login, payment, chat, or automated emergency dispatch because these functions are outside the ResQTh MVP scope defined in the SRS.
+The diagram intentionally excludes features such as account registration, payment, group chat, and automated emergency dispatch because they are outside the ResQTh MVP scope.
 
 ---
 
 ### 1.2 Sequence Diagram — Happy Path
 
-The happy-path sequence diagram shows the normal successful flow from obtaining the user's location to displaying the appropriate emergency response.
+The happy-path sequence diagram shows a normal successful flow from identifying the user's province to displaying the appropriate emergency response.
 
 ![ResQTh Happy Path Sequence Diagram](diagrams/sequence-happy-path.png)
 
 ### Step-by-step Execution
 
 1. The user opens ResQTh and requests or selects a location.
-2. The system obtains the user's location and identifies the province.
+2. The system identifies the user's province.
 3. The user selects an emergency category.
-4. The client sends the selected province and category to the system.
+4. The system receives the selected province and category.
 5. The system retrieves matching emergency information.
-6. The system determines whether the situation requires a high-urgency or low-urgency response.
-7. The appropriate response is returned and displayed to the user.
+6. The system determines whether the situation should use a high-urgency or low-urgency response.
+7. The appropriate response is displayed to the user.
 
 ### SRS Alignment
 
-- **FR-1** is represented by the location request and province identification.
+- **FR-1** is represented by location detection or manual province selection.
 - **FR-2** is represented by emergency-category selection.
-- **FR-3** is represented by information retrieval, urgency handling, and response display.
-- The flow keeps the province active while the category is selected, which matches the SRS behavior.
+- **FR-3** is represented by emergency-information retrieval, urgency handling, and response display.
 
 ---
 
 ### 1.3 Sequence Diagram — Unhappy Path / Error Handling
 
-The unhappy-path sequence diagram shows how ResQTh recovers when the AI result is unclear or when no matching local contact is available.
+The unhappy-path sequence diagram shows how ResQTh recovers when a natural-language result is unclear or when no matching local emergency contact is available.
 
 ![ResQTh Unhappy Path Sequence Diagram](diagrams/sequence-unhappy-path.png)
 
 ### Step-by-step Execution
 
-1. The user enters a natural-language description of the situation.
-2. The system sends the query for natural-language interpretation.
-3. The returned result is incomplete or unclear.
-4. The system asks the user to confirm or correct the province and/or category.
-5. The user corrects the result.
-6. The system searches for emergency information using the corrected values.
-7. If no local contact matches the province and category, the system uses the national fallback.
-8. The user receives a usable emergency response instead of reaching a dead-end error.
+1. The user enters a natural-language description.
+2. The prototype performs a simulated interpretation of the input.
+3. The interpreted province, category, and urgency are presented for review.
+4. The user confirms or changes the province and/or category.
+5. The system continues using the confirmed values.
+6. The prototype can demonstrate a national emergency fallback when no local match is available.
+7. The user receives a usable response instead of reaching a dead-end error.
 
 ### SRS Alignment
 
-- **FR-4** requires the user to be able to correct an incorrect AI suggestion before searching.
+- **FR-4** requires the user to be able to correct the interpreted province or category before continuing.
 - **FR-3** requires a national emergency hotline fallback when no local contact matches the selected province and category.
-- The sequence therefore demonstrates both manual recovery and fallback behavior required by the SRS.
 
 ---
 
 ## 2. Data Model
 
-The ResQTh data model defines the information needed to support the Must-Have Functional Requirements.
+The ResQTh data model describes the information the intended system needs to support the Must-Have Functional Requirements.
 
-At this design stage, the model is **technology-agnostic**. It describes the information that the system needs without selecting a specific database, framework, or storage technology.
+At this stage, the model is **technology-agnostic**. It does not select a specific database or framework.
+
+> **Prototype note:** The current M3 prototype does not use a real database. It uses simplified in-memory mock data to demonstrate the required flows. The entities below represent the logical data model for the intended system.
 
 ### 2.1 Entity Summary
 
@@ -167,16 +167,16 @@ At this design stage, the model is **technology-agnostic**. It describes the inf
 
 ### 2.4 Data-Model Alignment with the SRS
 
-- **FR-1** needs `Province` because emergency information must be localized by province.
-- **FR-2** needs `EmergencyCategory` because the user selects a category and the system determines urgency from it.
-- **FR-3** needs `EmergencyContact`, `GuidanceStep`, `OfficialFacility`, and `IncidentNote` to support high- and low-urgency responses.
-- **FR-4** does not require a permanent `AIQuery` entity. Natural-language input is interpreted into temporary province, category, and urgency values and then reuses the existing model.
+- **FR-1** needs `Province` because emergency information is localized by province.
+- **FR-2** needs `EmergencyCategory` because the user selects a category and the system uses the category's urgency level.
+- **FR-3** needs `EmergencyContact`, `GuidanceStep`, `OfficialFacility`, and `IncidentNote` to support the different response types.
+- **FR-4** does not require a permanent `AIQuery` entity. Natural-language input produces temporary province, category, and urgency values and then reuses the existing model.
 
 ---
 
 ## 3. UI Design & User Flow
 
-The ResQTh UI is designed to help users reach relevant emergency information quickly, with clear feedback and minimal confusion.
+The ResQTh UI is designed to help users reach relevant emergency information with a clear and simple flow.
 
 ### 3.1 Design System
 
@@ -194,14 +194,14 @@ Color is not used alone to communicate urgency. Text labels such as **Urgent** a
 
 #### Typography
 
-- Large bold headings provide a clear visual hierarchy.
+- Large bold headings provide visual hierarchy.
 - Body text uses readable sentence case.
-- Labels and helper text are separated visually from primary information.
+- Labels and helper text are visually separated from primary information.
 - Buttons use clear action-oriented labels such as **Call 1669**, **Choose Province**, and **Save Note**.
 
 #### Spacing
 
-The UI follows a consistent spacing scale:
+The UI uses a consistent spacing scale:
 
 **4 / 8 / 16 / 24 / 32 px**
 
@@ -215,60 +215,42 @@ The UI follows a consistent spacing scale:
 - Urgency status badge
 - Hotline card
 - Checklist item
-- Official-facility card
+- Official-facility guidance card
 - Incident-note field
 - Error / fallback alert
 - Help panel
 
 ---
 
-### 3.2 Accessibility
+### 3.2 Accessibility Considerations
 
-The prototype applies the course accessibility guidance:
+The prototype includes several accessibility-oriented design choices:
 
-- Sufficient text/background contrast
-- Visible keyboard focus
-- Interactive targets approximately 44 px or larger
+- Visible keyboard focus styles
+- Interactive controls sized around 44 px or larger
 - Labelled form fields
 - Semantic HTML controls
-- Helpful and understandable error messages
-- Urgency shown with text/icons as well as color
+- Clear error and fallback messages
+- Urgency communicated with text/icons as well as color
 
 ---
 
-### 3.3 Nielsen's 10 Usability Heuristics
+### 3.3 UI-to-Requirement Mapping
 
-| # | Heuristic | Application in ResQTh |
-| :--- | :--- | :--- |
-| 1 | Visibility of system status | ResQTh shows feedback such as detecting location, interpreting input, saving, saved, and error states |
-| 2 | Match between system and the real world | Uses familiar terms such as Medical Emergency, Police, Lost Passport, Province, and Call |
-| 3 | User control and freedom | Users can go Back, Cancel, Change Situation, or Clear Category |
-| 4 | Consistency and standards | Cards, buttons, status styles, spacing, and navigation patterns are reused consistently |
-| 5 | Error prevention | AI results are reviewed before use and GPS sharing requires confirmation |
-| 6 | Recognition rather than recall | Emergency categories and current context remain visible |
-| 7 | Flexibility and efficiency | Users can either select a category manually or use natural-language input |
-| 8 | Aesthetic and minimalist design | Uses clear hierarchy, restrained colors, and focused emergency actions |
-| 9 | Help users recognize, diagnose, and recover from errors | Location failure, no-local-match, and offline states provide clear recovery actions |
-| 10 | Help and documentation | A Help panel explains the basic ResQTh flow |
-
----
-
-### 3.4 UI-to-Requirement Mapping
-
-| UI Screen ID | Screen / State | Mapped Requirement | Action / Trigger | State Handled |
+| UI Screen ID | Screen / State | Mapped Requirement | Action / Trigger | Prototype Behavior |
 | :--- | :--- | :--- | :--- | :--- |
-| `UI-01` | Home / Location | FR-1 | Detect location or choose province | GPS success / manual fallback |
-| `UI-02` | Emergency Category Selection | FR-2 | Select or clear emergency category | Selected category / general-hotline state |
-| `UI-03` | High-Urgency Response | FR-3 | Call hotline or optionally share GPS | Immediate emergency response |
-| `UI-04` | Low-Urgency Guidance | FR-3 | Follow checklist, add note, view facility | Post-incident guidance |
-| `UI-05` | Natural-Language Input | FR-4 | Submit natural-language description | Interpretation / validation |
-| `UI-06` | AI Result Review | FR-4 | Confirm or correct province/category | Correct result / manual override |
-| `UI-07` | National Fallback | FR-3 | Show national emergency contact | No local contact matched |
-| `UI-08` | Offline State | NFR-4 | Use preloaded national hotline/guidance data | Network unavailable |
+| `UI-01` | Home / Location | FR-1 | Detect location or choose province | Simulated location detection and manual province selection; selected province is kept as UI state |
+| `UI-02` | Emergency Category Selection | FR-2 | Select or clear emergency category | Category selection and return to general-hotline state |
+| `UI-03` | High-Urgency Response | FR-3 | Call hotline or choose GPS sharing | Hotline action is simulated; GPS sharing requires confirmation and is not transmitted |
+| `UI-04` | Low-Urgency Guidance | FR-3 | Follow checklist, add note, view facility guidance | Checklist and temporary note are interactive; route action is simulated |
+| `UI-05` | Natural-Language Input | FR-4 | Submit natural-language description | Natural-language interpretation is simulated |
+| `UI-06` | AI Result Review | FR-4 | Confirm or correct province/category | User can manually correct the interpreted result before continuing |
+| `UI-07` | National Fallback | FR-3 | Show national emergency contact | Demonstrates the intended fallback state; no real local-contact lookup is performed |
+| `UI-08` | Offline State | NFR-4 | Open offline-state demonstration | Shows mock preloaded national hotline information; real offline caching is not implemented |
 
 ---
 
-### 3.5 Main User Flows
+### 3.4 Main User Flows
 
 #### Manual Emergency Flow
 
@@ -282,9 +264,34 @@ The prototype applies the course accessibility guidance:
 
 **No Local Match → National Emergency Fallback**
 
-#### Offline Flow
+#### Offline Demonstration
 
-**Network Failure → Preloaded National Hotlines and Basic Guidance**
+**Offline State → Mock Preloaded National Hotlines**
+
+---
+
+### 3.5 Prototype Scope and Limitations
+
+The M3 prototype is intended to demonstrate the required clickable flows without a real backend or database.
+
+The following behaviors are simulated in the current prototype:
+
+- Location detection
+- Natural-language interpretation
+- Emergency phone calling
+- GPS-coordinate sharing
+- Facility routing
+- Offline caching / preloaded data behavior
+
+The selected province is maintained and displayed throughout the flow, but the current mock emergency-contact and facility data are not yet separate province-specific datasets.
+
+The national-fallback screen is available as a prototype demonstration; it is not triggered by a real backend lookup failure.
+
+Incident notes are stored only temporarily in the prototype state and are not saved to a persistent database.
+
+The Thai-language button is present as a planned language option, but full Thai translation is not implemented in the current prototype.
+
+Performance-related NFRs are design targets and have not been formally measured with real external services at this prototype stage.
 
 ---
 
@@ -296,4 +303,4 @@ The prototype applies the course accessibility guidance:
 | FR-2 | Select / clear emergency category | EmergencyCategory | UI-02 |
 | FR-3 | Determine and display appropriate response | EmergencyContact, GuidanceStep, OfficialFacility, IncidentNote | UI-03, UI-04, UI-07 |
 | FR-4 | Interpret natural-language input and allow correction | Temporary province/category/urgency values | UI-05, UI-06 |
-| NFR-4 | Provide basic emergency information when offline | Preloaded hotline / guidance data | UI-08 |
+| NFR-4 | Demonstrate intended offline behavior | Mock preloaded hotline information | UI-08 |
