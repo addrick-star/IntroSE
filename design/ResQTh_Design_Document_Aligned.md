@@ -467,14 +467,3 @@ Additional notes:
 | NFR-5 | Protect location/query privacy and end access after sharing stops/expires | Restricted location-sharing session; consent-based query log | UI-09, UI-10 | Current demo uses local state; production privacy/security behavior requires a backend and verification. |
 
 ---
-
-## 5. Alignment Issues to Resolve Before Submission
-
-1. **LLM versus rule-based parser:** M1 mentions an LLM API dependency and M2 has a one-LLM-call constraint, but the prototype explicitly uses a local rule-based parser and makes no LLM call. Decide whether the current project is rule-based for this increment or whether an LLM integration is genuinely planned/implemented, then update M1/M2 consistently. Do not claim an LLM is used by the prototype.
-2. **Four versus six use cases:** M2 lists UC-1 through UC-6 and FR-1 through FR-6, so the use-case diagram and checklist should not say there are only four use cases. Show all six and mark FR-5 as the second increment.
-3. **FR-5 scope and claims:** M2 places FR-5 in the second increment, while the prototype has a local interactive demonstration. Describe it as a demonstration, not as a production live-location service. Ensure the “Until I stop” option agrees with the final FR-5 expiration rule.
-4. **FR-6 traceability:** Include FR-6 in the use-case diagram, data model, UI mapping, and traceability summary. Label nearby facility entries and distances as sample data.
-5. **Category count:** The prototype has nine categories; M2's current category examples/list appear smaller. Choose the intended category set and make the SRS, design document, and tests agree.
-6. **Offline behavior:** M2 NFR-4 describes offline caching, but the current prototype's offline-mode demonstration was removed. Mark offline behavior as not implemented until it is actually built and tested.
-7. **Persistence and privacy:** M1 mentions saved contacts, bookmarked checklists, and consent-based recent query logs. The current prototype does not persist these. Keep them as target-model features unless they are implemented, and make sure any future storage follows NFR-5.
-8. **Diagram files:** Verify that the PNG diagrams themselves match the revised text. Updating this document does not automatically update the images in `diagrams/`.
