@@ -1,9 +1,5 @@
 # Design Document: ResQTh
 
-This document describes the UML diagrams, logical data model, and UI design/user-flow mapping for ResQTh. The system architecture is documented separately in the `architecture/` folder.
-
-## Document alignment and implementation status
-
 This design document follows the six functional requirements in the updated M1 Charter and M2 SRS:
 
 - **FR-1:** Detect user's location
@@ -12,12 +8,6 @@ This design document follows the six functional requirements in the updated M1 C
 - **FR-4:** Natural-language emergency search
 - **FR-5:** Share live location with a trusted contact
 - **FR-6:** Find nearby emergency facilities
-
-The SRS describes FR-1, FR-2, FR-3, FR-4, and FR-6 as the first-increment/MVP flow and FR-5 as the second increment. The current M3 prototype contains interactive demonstrations for all six areas, but a demonstration is not the same as a production implementation. In particular, the prototype uses mock emergency/facility data, keeps state in browser memory, and does not provide a real backend or database.
-
-**Important implementation distinction:** The current prototype's FR-4 parser is rule-based: it uses English/Thai keywords, aliases, typo tolerance, and a danger-first rule. It does **not** call an LLM. The M1 Charter mentions an LLM API dependency and M2 currently contains a one-LLM-call constraint, so those statements should be reconciled in the SRS before submission. This design document describes the implementation that is actually in the prototype and does not claim that an LLM is connected.
-
----
 
 ## 1. UML Diagrams
 
